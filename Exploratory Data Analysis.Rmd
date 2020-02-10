@@ -1,0 +1,120 @@
+---
+title: "Exploratory Data Analysis"
+author: "W.Lu"
+date: "15/01/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+According to the customer survey about two different accessorie Brand , Elago and Belkin.
+
+We according to the different factor ( Age ,Salary, Car, Credit , Education Level ,Zipcode ) to analyse the different factor which influence the consuming bahavior more .
+
+As a result , we see findings as following.
+
+1. In education factor, the customers who has level 2 and 3 consume more products .
+2. In salary factor, the middle salary level (2500 ~ 10000) prefer brand Belkin more .The high salary level (> 10000) prefers Brand Elago.
+3. In macro data ,high salary customer has lower credit .
+4. In age group (< 30),the most customers buying Brand Elago, espicially for the customers has the Elevel 4. For Brank Belkin, could take attention for the following subgroup , which prefers belkin more than Elago. 
+
+   ---> Age 25-30 
+   (Elevel 3,Zipcode 1)
+   (Elevel 3,Zipcode 7)
+   (Elevel 3,Zipcode 8)
+   (Elevel 2,Zipcode 3)
+   (Elevel 2,Zipcode 7)
+   (Elevel 2,Zipcode 8)
+
+   ---> Age 0-25 
+   (Eleve2 3,Zipcode 6)
+   (Eleve1 3,Zipcode 4)
+   (Eleve1 3,Zipcode 6)
+
+5. In age group (30-60),the most customers buying Brand Elago from Elevel 1 and 4. 
+
+6. In age group (>60),the most customers buying Brand Belkin.
+
+7. In all customer group. The customers buying bit more Brand Elago products than Brand Belkin products.
+
+
+```{r cars,echo=FALSE,results="hide"}
+#----- load library
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(corrplot)
+
+#----- read csv ,seprate data according to ; label NA in blank colume use na.string 
+
+survey <- read.csv("surveyBelkinElago.csv",sep=";", na.strings = " ")
+colnames(survey) <- c("Salary","Age","Elevel","Car","Zipcode","Credit","Brand")
+is.na(survey) #Will show your NA’s through logical data. (TRUE if it’s missing, FALSE if it’s not.)
+na.exclude(survey$brand)#Drops any rows with missing values, but keeps track of where they were.
+survey = na.omit(survey)#Drops any rows with missing values and omits them forever.
+
+```
+
+```{r main,warning = FALSE}
+
+#----- check data types 
+summary(survey)
+head(survey)
+Youth<- survey[survey$Age < 30,]
+Middel<- survey[survey$Age>30 & survey$Age < 60,]
+Senior <- survey[survey$Age > 60,]
+
+# correlation matrix
+str(survey)
+# change the factor to numeric 
+survey$Credit<-as.numeric(survey$Credit)
+survey$Salary<-as.numeric(survey$Salary)
+cm<-cor(survey[1:6])
+corrplot(cm,)
+
+#----- visualization
+#Chart 1 to 3 shows in different education level ,living area and Age , which brand are more popular .
+d <- ggplot(data=survey,aes(x=Elevel))
+d + geom_histogram(stat="count",binwidth = 10,aes(fill=Brand),colour="black")# 1 to 4 , 4 is higher eudcation
+#----- chart 1 ,in education level 2 and 3 , customers has stronger consuming power.
+e <- ggplot(data=survey,aes(x=Zipcode))
+e + geom_histogram(stat="count",binwidth=10,aes(fill=Brand),colour="black")
+#----- chart 2 ,not obviously difference , in a macro way , elago has more market power .
+f <- ggplot(data=survey,aes(x=Age))
+f + geom_histogram(stat="count",binwidth=10,aes(fill=Brand),colour="black")
+#----- chart 3, the customer group after 55 , prefers Belkin brand , and customer younger than 55 ,prefer Elago.
+g <- ggplot(data=survey,aes(x=Credit,y=Salary,colour=Brand))
+g + geom_point()
+#----- chart 4, the customer has salary between 2500 and 10000, prefer Brand Belkin more , lower credit , higher salary. 
+#------As age is a strong indictator for predicting customer behavior , so I have categorized to 3 age groups ( Young, Middle, Senior )
+a <- ggplot(data=Youth,aes(x=Age,colour=Brand))
+
+a + geom_bar(aes(fill=Brand),colour="black")+facet_grid(Elevel~.,scale="free")+xlab("Age <30")
+#----- Chart 5 shows in age group younger than 30,in defferent education group, the customer behavior relationship between age and brand.
+
+a + geom_density(aes(fill=Brand),colour="black",alpha=0.4)+facet_grid(Zipcode~Elevel,scale="free")+xlab("Age <30")
+#----- Chart 6 shows in age group younger than 30 ,in defferent education group and different Zipcode area , the customer behavior relationship with brand.
+b <- ggplot(data=Middel,aes(x=Age,colour=Brand))
+b + geom_bar(aes(fill=Brand),colour="black")+facet_grid(Elevel~.,scale="free")+xlab("Middel(30-60)")
+#----- Chart 7 shows in age group 31-60 ,in defferent education group, the customer behavior relationship between age and brand.
+b + geom_density(aes(fill=Brand),colour="black",alpha=0.4)+facet_grid(Zipcode~Elevel,scale="free")+xlab("Middel(30-60")
+#----- Chart 8 shows in age group 31-60,in defferent education group and different Zipcode area , the customer behavior relationship with brand.
+c <- ggplot(data=Senior,aes(x=Age,colour=Brand))
+c + geom_bar(aes(fill=Brand),colour="black")+facet_grid(Elevel~.,scale="free")+xlab("Senior(>60)")
+#----- Chart 9 shows in age group older than 60 ,in defferent education group, the customer behavior relationship between age and brand.
+c + geom_density(aes(fill=Brand),colour="black",alpha=0.4)+facet_grid(Zipcode~Elevel,scale="free")+xlab("Senior(>60)")
+#----- Chart 10 shows in age group older than 60 ,in defferent education group and different Zipcode area , the customer behavior relationship with brand.
+
+
+```
+
+## Further questions
+
+1. Why high salary customers prefer buying Elago products ?
+2. Why people older than 60 prefer buying Belkin products?
+3. Why in eudcation level 1 and 4 , customers prefer buying Elago products ?
+

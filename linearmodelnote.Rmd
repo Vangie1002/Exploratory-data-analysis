@@ -1,0 +1,70 @@
+---
+title: "Linear model - Discover the relationship between speed and distance"
+author: "w.Lu"
+date: "13/01/2020"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction 
+
+This a Linear model sample according to the car data about distance, speed ,name of the car .
+we run our data through a modelling algorithm. The model that we will be using is the Linear Regression Model, which is helpful when trying to discover the relationship between two variables. These two variables represent the X and Y within the linear equation. The X variable is the predictor variable, also known as the independent variable because it doesn’t depend on other attributes while making predictions. Y is the response variable, also known as the dependent variable because its value depends on the other variables.  (We will be keeping this at a high level. If you’d like to discover more about this equation, please feeI free to do your own research.) In our case, these two variables will be ** Speed ** and ** Distance **. We are trying to predict Distance, so it is our dependent/response/Y variable. Speed is our independent/predictor/X variable.
+To create this model, we will be using the linear model function – lm(). Here is the basic line of code for the linear model function.
+
+```{r cars, warning = FALSE}
+# read data
+dataset <- read.csv("cars.csv")
+#List your attributes within your data set.
+attributes(dataset)
+head(dataset)
+#Prints the min, max, mean, median, and quartiles of each attribute.
+summary(dataset)
+#Displays the structure of your data set.
+str(dataset)
+#Names your attributes within your data set.
+names(dataset)
+#Will print out the instances within that particular column in your data set.
+dataset$name.of.car
+dataset$speed.of.car
+dataset$distance.of.car
+# Your columns must be in numeric form to perform these plots.
+hist(dataset$distance.of.car)
+plot(dataset$distance.of.car,dataset$speed.of.car)
+qqnorm(dataset$speed.of.car)
+# Data Types
+#Numeric- Numbers with decimals. (Ex: 1.0, 10.5, 4.5, etc.)
+#Integer Data- Whole numbers (Ex: 11, 45, 78, etc.)
+#Factor Data- Categorical data (Ex: Red, Blue, Green, Purple, etc.)
+#Ordinal Data- Ordered data (Ex: educational levels, temperature, etc.)
+#Character Data- String values, which are characters (words) with quotes around them. (Ex: "Red", "Blue", "Green", "Purple", etc.)
+#Logical- TRUE or TRUE (Always capitalize TRUE or FALSE)
+
+names(dataset)<-c("Brand","Speed","Distance") 
+summary(dataset)
+#Will show your NA’s through logical data. (TRUE if it’s missing, FALSE if it’s not.)
+is.na(dataset) 
+
+# from here not understand 
+
+set.seed(10)
+trainSize<- round(nrow(dataset) * 0.7)
+testSize <- nrow(dataset) - trainSize
+
+training_indices <- sample(seq_len(nrow(dataset)), size = trainSize)
+trainSet <- dataset[training_indices,]
+testSet <- dataset[-training_indices,] 
+ModelA <- lm(dataset$Speed~dataset$Distance, trainSet)
+summary(ModelA)
+# Multiple R-squared- How well the regression line fits the data (1 means it’s a perfect fit).
+# A p-value of more than 0.05 means the Independent Variable has no effect on the Dependent Variable; less than 0.05 means the relationship is statistically significant.
+Predictiondistance <- predict(ModelA,trainSet)
+Predictiondistance
+```
+
+

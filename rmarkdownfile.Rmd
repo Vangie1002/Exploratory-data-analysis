@@ -1,0 +1,63 @@
+---
+title: "Note rolling a dice"
+author: "w.Lu"
+date: "13/01/2020"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project 1: Weighted dice
+
+we assume to rolling 2 dice in one time .
+
+
+
+```{r rolling a dice 1}
+Roll1 <- function(){
+  die <- 1:6 # we store a vector called "die" with numbers 1 to 6
+  dice <- sample(die, size = 2, replace = TRUE) # Sampling with replacement is an easy way to create independent random samples. 
+  sum(dice)
+}
+
+# Now we call the fuction
+Roll1()
+Roll1()
+```
+
+## Let's try another time 
+
+
+```{r rolling a dice 2}
+Roll2 <- function(bones = 1:4) {
+  dice <- sample(bones, size = 2, replace = TRUE)
+  sum(dice) }
+  Roll2()
+```
+
+## A third try
+
+```{r rolling a dice 3}
+
+  Roll3 <- function(bones = 1:6) {
+    dice <- sample(bones, size = 2, replace = TRUE)
+    sum(dice)
+  }
+
+  x <- c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
+  x  
+  x <- c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
+  y <- x^3
+  y
+  Roll3()
+  Roll3()
+```
+## Summary
+
+As you’ve seen, R is a language that you can use to talk to your computer. You write commands in R and run them at the command line for your computer to read. Your computer will sometimes talk back–for example, when you commit an error–but it usually just does what you ask and then displays the result.
+The two most important components of the R language are objects, which store data, and functions, which manipulate data. R also uses a host of operators like +, -, *, /, and <- to do basic tasks. As a data scientist, you will use R objects to store data in your computer’s memory, and you will use functions to automate tasks and do complicated calculations.
