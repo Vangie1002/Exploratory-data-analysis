@@ -2,7 +2,10 @@
 title: "Exploratory Data Analysis"
 author: "W.Lu"
 date: "15/01/2020"
-output: html_document
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
