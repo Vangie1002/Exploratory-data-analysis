@@ -1,2 +1,2 @@
-* .html linguist-vendored
-*.Rproj linguist-vendored=false
+* linguist-vendored
+*.R linguist-vendored=false
